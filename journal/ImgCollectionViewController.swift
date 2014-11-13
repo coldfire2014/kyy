@@ -9,7 +9,8 @@
 import UIKit
 
 let reuseIdentifier = "imgcell"
-
+let hIdentifier = "imgcellh"
+let fIdentifier = "imgcellf"
 class ImgCollectionViewController: UICollectionViewController {
     var m_w:Double = 0;
     var assert:AssetHelper = AssetHelper.sharedAssetHelper()
@@ -23,8 +24,8 @@ class ImgCollectionViewController: UICollectionViewController {
 
         // Register cell classes
         self.collectionView.registerClass(ImgCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView.registerClass(imgGroupView.self, forSupplementaryViewOfKind:UICollectionElementKindSectionHeader, withReuseIdentifier:reuseIdentifier)
-        self.collectionView.registerClass(UICollectionReusableView.self, forSupplementaryViewOfKind:UICollectionElementKindSectionFooter, withReuseIdentifier:reuseIdentifier)
+        self.collectionView.registerClass(imgGroupView.self, forSupplementaryViewOfKind:UICollectionElementKindSectionHeader, withReuseIdentifier:hIdentifier)
+        self.collectionView.registerClass(imgGroupView.self, forSupplementaryViewOfKind:UICollectionElementKindSectionFooter, withReuseIdentifier:fIdentifier)
         self.view.backgroundColor = UIColor(white: 0.7, alpha: 1.0)
         self.collectionView.backgroundColor = UIColor.clearColor()
         self.collectionView.frame = CGRect(origin: CGPoint(x: 0, y: 128.0/2.0), size: CGSize(width: collectionView.frame.width, height: collectionView.frame.height - 128.0/2.0))// - 98.0/2.0
@@ -110,7 +111,7 @@ class ImgCollectionViewController: UICollectionViewController {
     
     func collectionView(collectionView: UICollectionView,layout:UICollectionViewLayout,referenceSizeForFooterInSection:Int) ->CGSize{
         var f = UIScreen.mainScreen().bounds.size;
-        return CGSize(width:f.width,height:2.0/2.0)
+        return CGSize(width:f.width,height:36.0/2.0)
         
     }
     override func collectionView(collectionView: UICollectionView,
@@ -119,16 +120,18 @@ class ImgCollectionViewController: UICollectionViewController {
             
             if kind == UICollectionElementKindSectionHeader{
                 let headerView:imgGroupView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader,
-                    withReuseIdentifier:reuseIdentifier,
+                    withReuseIdentifier:hIdentifier,
                     forIndexPath: indexPath) as imgGroupView
                 var s = sections[indexPath.section]["name"] as String
                 headerView.title.text = s
                 return headerView
             }else{
-                let footerView:UICollectionReusableView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionFooter,
-                    withReuseIdentifier:reuseIdentifier,
-                    forIndexPath: indexPath) as UICollectionReusableView
-                footerView.backgroundColor = UIColor(white: 1.0, alpha: 0.2)
+                let footerView:imgGroupView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionFooter,
+                    withReuseIdentifier:fIdentifier,
+                    forIndexPath: indexPath) as imgGroupView
+                var s = sections[indexPath.section]["count"] as Int
+                footerView.title.text = "共 \(s) 张照片"
+                footerView.title.textAlignment = .Center
                 return footerView
             }
     }
