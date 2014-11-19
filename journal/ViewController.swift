@@ -47,10 +47,13 @@ class ViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "taphead", name: MSG_EDIT_HEAD, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "tapimgs", name: MSG_EDIT_IMGS, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showMy", name: MSG_MY_SHOW, object: nil)
     }
     override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_EDIT_IMGS, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_EDIT_HEAD, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_MY_SHOW, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_MY_SHOW, object: nil)
+        
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let sid = segue.identifier {

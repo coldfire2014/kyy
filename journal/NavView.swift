@@ -51,8 +51,8 @@ class NavView: UIWindow {
         btnRight.tag = 103
         bk.addSubview(btnRight)
         
-        btnLeft.setBadgeValue(0)
-        btnRight.setBadgeValue(2)
+//        btnLeft.setBadgeValue(0)
+//        btnRight.setBadgeValue(2)
         
         var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "other")
         btnRight.addGestureRecognizer(panGesture)

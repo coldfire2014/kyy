@@ -11,6 +11,7 @@ import UIKit
 class ImgCollectionViewCell: UICollectionViewCell {
     var index:NSIndexPath = NSIndexPath()
     var asset:ALAsset = ALAsset()
+    var maxCount = -1
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.greenColor()
@@ -54,14 +55,14 @@ class ImgCollectionViewCell: UICollectionViewCell {
         self.addSubview(btn)
         var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "didtap")
         btn.addGestureRecognizer(panGesture)
-        var pan2Gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "didbig:")
+        var pan2Gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "didprev:")
         self.addGestureRecognizer(pan2Gesture)
     }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func didbig( t:UITapGestureRecognizer){
+    func didprev( t:UITapGestureRecognizer){
         var p = t.locationInView(self)
         var pc = t.locationInView(self.superview?.superview)
         var r = CGRect(origin:CGPoint(x:self.frame.origin.x,y:(pc.y-p.y)), size:self.frame.size)// self.frame.offset(0,self.superview!.frame.origin.y)
@@ -75,17 +76,23 @@ class ImgCollectionViewCell: UICollectionViewCell {
             if let gc = btn.viewWithTag(203){
             
                 if (gc.hidden) {
-                    (self.superview as UICollectionView).selectItemAtIndexPath(index,animated:true, scrollPosition:UICollectionViewScrollPosition.None)
-                    gc.hidden = !gc.hidden
-                    var t:CATransform3D = CATransform3DIdentity
-                    let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
-                    moveAnim.values = [NSValue(CATransform3D: CATransform3DScale(t, 1.3, 1.3, 1)),NSValue(CATransform3D: CATransform3DScale(t, 0.8, 0.8, 1)),NSValue(CATransform3D: CATransform3DScale(t, 1.1, 1.1, 1)),NSValue(CATransform3D: t)];
-                    moveAnim.removedOnCompletion = true
-                    moveAnim.duration = 0.5
-                    moveAnim.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                    moveAnim.removedOnCompletion = true
-                    moveAnim.fillMode = kCAFillModeForwards
-                    btn.layer.addAnimation(moveAnim, forKey: "s")
+                    var cv = (self.superview as UICollectionView)
+                    var ips = cv.indexPathsForSelectedItems()
+                    if ips?.count < maxCount {
+                        cv.selectItemAtIndexPath(index,animated:true, scrollPosition:UICollectionViewScrollPosition.None)
+                        gc.hidden = !gc.hidden
+                        var t:CATransform3D = CATransform3DIdentity
+                        let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
+                        moveAnim.values = [NSValue(CATransform3D: CATransform3DScale(t, 1.3, 1.3, 1)),NSValue(CATransform3D: CATransform3DScale(t, 0.8, 0.8, 1)),NSValue(CATransform3D: CATransform3DScale(t, 1.1, 1.1, 1)),NSValue(CATransform3D: t)];
+                        moveAnim.removedOnCompletion = true
+                        moveAnim.duration = 0.5
+                        moveAnim.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                        moveAnim.removedOnCompletion = true
+                        moveAnim.fillMode = kCAFillModeForwards
+                        btn.layer.addAnimation(moveAnim, forKey: "s")
+                    }else{
+                        NSNotificationCenter.defaultCenter().postNotificationName(MSG_ALERT, object: "最多只能选\(maxCount)张哦 !")
+                    }
                 }else{
                     (self.superview as UICollectionView).deselectItemAtIndexPath(index,animated:true)
                     UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in

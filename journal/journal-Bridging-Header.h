@@ -3,7 +3,7 @@
 #import "UIKit+AFNetworking.h"
 #import "BaiduMobStat.h"
 #import "AssetHelper.h"
-
+#define MSG_ALERT "MSG_ALERT"
 #define MSG_BACK "MSG_BACK"
 #define MSG_SETUP_DESELECT "MSG_SETUP_DESELECT"
 #define MSG_MY_SHOW "MSG_MY_SHOW"

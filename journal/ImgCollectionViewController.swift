@@ -16,6 +16,8 @@ class ImgCollectionViewController: UICollectionViewController {
     var assert:AssetHelper = AssetHelper.sharedAssetHelper()
     var sections:Array<NSDictionary> = [];
     var cells:Array<Array<ALAsset>> = [];
+    var maxCount = 4
+    var selectItems:Array<NSIndexPath> = [];
     override func viewDidLoad() {
         super.viewDidLoad()
         var w = UIScreen.mainScreen().bounds.size.width;
@@ -157,6 +159,7 @@ class ImgCollectionViewController: UICollectionViewController {
         }
         cell.index = indexPath
         cell.asset = al
+        cell.maxCount = self.maxCount
         return cell
     }
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) -> Void {

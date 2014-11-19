@@ -26,14 +26,14 @@ class StatusBar: UIWindow {
         self.backgroundColor = UIColor.clearColor()
         self.alpha = 1.0
         self.hidden = false;
-        bk.frame = CGRectMake(self.frame.size.width, 0, 160, 20)
-        bk.backgroundColor = UIColor.lightGrayColor()
+        bk.frame = CGRectMake(self.frame.size.width, 0, self.frame.size.width, 20)
+        bk.backgroundColor = UIColor(red: 39.0/255.0, green: 136.0/255.0, blue: 231.0/255.0, alpha: 1.0)
         bk.layer.cornerRadius = 10.0
         self.addSubview(bk)
-        msg1.frame = CGRectMake(10, 0, 140, 20)
-        msg1.font = UIFont.systemFontOfSize(15.0)
+        msg1.frame = CGRectMake(7, 0, 140, 20)
+        msg1.font = UIFont.systemFontOfSize(13.0)
         msg1.textAlignment = .Left
-        msg1.textColor = UIColor.blackColor()
+        msg1.textColor = UIColor.whiteColor()
         msg1.backgroundColor = UIColor.clearColor()
         msg1.text = ""
         bk.addSubview(msg1)
@@ -56,27 +56,37 @@ class StatusBar: UIWindow {
         return Singleton.instance!
     }
     func didtap(){
-        UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
-            self.alpha = 0
-        }) { (Bool) -> Void in
-            
+        goout(0)
+    }
+    func goout(time:Double){
+        if self.alpha == 1.0 {
+            UIView.animateWithDuration(0.3, delay: time, options: .CurveEaseInOut, animations: { () -> Void in
+                self.alpha = 0
+                }) { (Bool) -> Void in
+                    
+            }
         }
     }
-    func talkMsg(msg:String,time:Float){
+    func talkMsg(msg:String,time:Double){
         self.alpha = 1.0
+        msg1.frame = CGRect(origin: msg1.frame.origin, size: CGSize(width: self.frame.size.width, height: msg1.frame.size.height))
         msg1.text = msg
-        bk.frame = CGRectMake(self.frame.size.width-70.0-85, 0, 170, 20)
+        msg1.sizeToFit()
+        msg1.frame = CGRect(origin: msg1.frame.origin, size: CGSize(width: msg1.frame.size.width, height: 20.0))
+        var ww = msg1.frame.width + 16.0
+        bk.frame = CGRectMake(self.frame.size.width-ww, 0, self.frame.size.width, 20)
         var animation:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "position")
         
-        var values = [NSValue(CGPoint: CGPoint(x:self.frame.size.width+85.0, y:10.0)),
-            NSValue(CGPoint: CGPoint(x:self.frame.size.width-80.0, y:10.0)),
-            NSValue(CGPoint: CGPoint(x:self.frame.size.width-65.0, y:10.0)),
-            NSValue(CGPoint: CGPoint(x:self.frame.size.width-70.0, y:10.0))]
+        var values = [NSValue(CGPoint: CGPoint(x:self.frame.size.width*1.5, y:10.0)),
+            NSValue(CGPoint: CGPoint(x:self.frame.size.width*1.5-ww-12.0, y:10.0)),
+            NSValue(CGPoint: CGPoint(x:self.frame.size.width*1.5-ww+6.0, y:10.0)),
+            NSValue(CGPoint: CGPoint(x:self.frame.size.width*1.5-ww, y:10.0))]
         animation.values = values
         animation.duration = 0.5
         animation.removedOnCompletion = true
         animation.fillMode = kCAFillModeForwards
         bk.layer.addAnimation(animation, forKey: "")
+        goout(0.5+time)
     }
     /*
     // Only override drawRect: if you perform custom drawing.

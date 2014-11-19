@@ -120,6 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_SETUP_DESELECT, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BTN_NANE_FOR_LIST, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BTN_NANE_FOR_EDIT, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_ALERT, object: nil)
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
@@ -129,6 +130,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "alert:", name: MSG_ALERT, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBar", name: MSG_BAR_SHOW, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBar", name: MSG_BAR_HIDE, object: nil)
         
@@ -144,6 +146,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    func alert(noc:NSNotification){
+        var s = noc.object as String
+        StatusBar.shareInstance().talkMsg(s, time: 0.8)
+    }
 }
 

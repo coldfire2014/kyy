@@ -119,6 +119,7 @@ class perviewImg: UIView {
         img.layer.addAnimation(animGroup, forKey: "s")
     }
     func didbig(){
+        self.userInteractionEnabled = false
         NSNotificationCenter.defaultCenter().postNotificationName(MSG_BAR_SHOW, object: nil)
         let bk = self.viewWithTag(205)!
         let img = bk.viewWithTag(206)!
@@ -134,6 +135,7 @@ class perviewImg: UIView {
                 bk.bounds = CGRect(origin:CGPointZero,size:self.zframe.size)
                 img.center = CGPoint(x:self.zframe.size.width/2.0,y:self.zframe.size.height/2.0)
                 self.goSmall()
+                self.userInteractionEnabled = true
         }
     }
     func goSmall(){
@@ -148,7 +150,6 @@ class perviewImg: UIView {
         }
     }
     var t = CATransform3DIdentity
-    var ts:CGFloat = 1.0
     func didPinch(g:UIPinchGestureRecognizer){
         let bk = self.viewWithTag(205)!
         let img = bk.viewWithTag(206)!
@@ -156,13 +157,20 @@ class perviewImg: UIView {
         case .Began:
             t = img.layer.transform
         case .Cancelled, .Ended:
-            ts = ts * g.scale
-            if ts < 0.8 {
+            var ts = img.layer.transform.m11
+            if ts < 1.0 {
                 didbig()
+            }else if ts > 2.0 {
+                img.layer.transform.m11 = 2.0
+                img.layer.transform.m22 = 2.0
             }
+            miChangeImg()
         default:
             img.layer.transform = CATransform3DScale(t, g.scale, g.scale, 1.0)
         }
+    }
+    func miChangeImg(){
+        
     }
     var firstTranslation:CGPoint = CGPoint()
     var previousTranslation:CGPoint = CGPoint()
@@ -181,7 +189,17 @@ class perviewImg: UIView {
             var tmp = g.translationInView(bkd)
             var yt:CGFloat = tmp.y - previousTranslation.y
             var xt:CGFloat = tmp.x - previousTranslation.x
-//            var imgframe:CGRect = CGRect(x: <#Double#>, y: <#Double#>, width: <#Double#>, height: <#Double#>)
+            
+            var cp = CGPoint(x: (img.frame.origin.x + img.frame.width)/2.0 + xt, y: (img.frame.origin.y+img.frame.height)/2.0 + yt)
+
+            if 0 > cp.x || bkd.frame.width < cp.x {
+                tmp.x = previousTranslation.x
+            }
+            if 0 > cp.y || bkd.frame.height < cp.y {
+                tmp.y = previousTranslation.y
+            }
+            yt = tmp.y - previousTranslation.y
+            xt = tmp.x - previousTranslation.x
             img.layer.transform = CATransform3DTranslate(img.layer.transform, xt, yt, 0)
             previousTranslation = tmp
         }

@@ -78,10 +78,22 @@ class myImageView: UIImageView {
             if badge > 0 {
                 bview?.hidden = false
                 (titled as UILabel).text = "\(badge)"
+                doudou(bview!)
             }else{
                 bview?.hidden = true
             }
         }
+    }
+    func doudou(view:UIView!){
+        var t:CATransform3D = CATransform3DIdentity
+        let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
+        moveAnim.values = [NSValue(CATransform3D: CATransform3DScale(t, 1.3, 1.3, 1)),NSValue(CATransform3D: CATransform3DScale(t, 0.8, 0.8, 1)),NSValue(CATransform3D: CATransform3DScale(t, 1.1, 1.1, 1)),NSValue(CATransform3D: t)];
+        moveAnim.removedOnCompletion = true
+        moveAnim.duration = 0.5
+        moveAnim.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        moveAnim.removedOnCompletion = true
+        moveAnim.fillMode = kCAFillModeForwards
+        view.layer.addAnimation(moveAnim, forKey: "s")
     }
     func clearBadge(){
         setBadgeValue(0)
