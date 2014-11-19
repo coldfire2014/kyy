@@ -11,15 +11,21 @@ import UIKit
 let reuseIdentifier = "imgcell"
 let hIdentifier = "imgcellh"
 let fIdentifier = "imgcellf"
+protocol ImgCollectionViewDelegate : NSObjectProtocol {
+    func didSelectAssets(items:Array<ALAsset>)
+    func ownAssets()->Array<ALAsset>
+}
 class ImgCollectionViewController: UICollectionViewController {
+    weak var delegate: ImgCollectionViewDelegate?
     var m_w:Double = 0;
     var assert:AssetHelper = AssetHelper.sharedAssetHelper()
     var sections:Array<NSDictionary> = [];
     var cells:Array<Array<ALAsset>> = [];
-    var maxCount = 4
+    var maxCount = 1
     var selectItems:Array<NSIndexPath> = [];
     override func viewDidLoad() {
         super.viewDidLoad()
+
         var w = UIScreen.mainScreen().bounds.size.width;
         m_w = (Double(w)-6.0)/4.0
         // Uncomment the following line to preserve selection between presentations
@@ -38,6 +44,9 @@ class ImgCollectionViewController: UICollectionViewController {
         self.collectionView.allowsMultipleSelection = true
         self.collectionView.clipsToBounds = false
         // Do any additional setup after loading the view.
+        
+        //加了已经有的以后
+        NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: collectionView.indexPathsForSelectedItems()?.count)
         
     }
 
@@ -112,18 +121,33 @@ class ImgCollectionViewController: UICollectionViewController {
     override func viewDidAppear(animated: Bool) {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleEnterForeground:", name: UIApplicationWillEnterForegroundNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "back", name: MSG_BACK, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "backWithOK", name: MSG_IMGS_OK, object: nil)
     }
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BACK, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_IMGS_OK, object: nil)
 //        if (_nResultType == DO_PICKER_RESULT_UIIMAGE)
         assert.clearData()
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
     }
+    func backWithOK(){
+        isOK = true
+    }
+    var isOK = false
     func back(){
-        NSLog("%@",collectionView.indexPathsForSelectedItems()!)
+        NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: 0)
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
-            
+            if self.isOK {
+                if let ips = self.collectionView.indexPathsForSelectedItems(){
+                    var als:Array<ALAsset> = []
+                    for indexPath in ips {
+                        var ar = self.cells[indexPath.section] as Array<ALAsset>
+                        var al = ar[indexPath.row] as ALAsset
+                        als.append(al)
+                    }
+                    self.delegate?.didSelectAssets(als)
+                }
+            }
         })
     }
     /*

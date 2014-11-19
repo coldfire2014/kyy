@@ -8,8 +8,24 @@
 
 import UIKit
 
-class PicInput: UIView {
-
+class PicInput: UIView ,ImgCollectionViewDelegate{
+    var imgs:Array<ALAsset> = [];
+    func didSelectAssets(items:Array<ALAsset>){
+        imgs = items
+        var count = imgs.count
+        if count > 8 {
+            count = 8
+        }
+        for i in 0..<count
+        {
+            let headAdd = self.viewWithTag(302+i)!
+            (headAdd as PicView).changeimg(imgs[i])
+        }
+        
+    }
+    func ownAssets()->Array<ALAsset>{
+        return imgs
+    }
     /*
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -36,7 +52,7 @@ class PicInput: UIView {
             var k = i % 4
             var j = i / 4
             var headAdd:PicView = PicView(frame: CGRect(x: 36.0/2.0 + CGFloat(k) * w, y: 80.0/2.0 + CGFloat(j) * (24.0/2.0 + 120.0/2.0), width: 120.0/2.0, height: 120.0/2.0))
-            headAdd.tag = 301+i
+            headAdd.tag = 302+i
             self.addSubview(headAdd)
             var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapimgs")
             headAdd.addGestureRecognizer(panGesture)

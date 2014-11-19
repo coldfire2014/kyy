@@ -106,7 +106,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             tn.show(true)
         }
     }
-
+    func setGadge(noc:NSNotification){
+        var i:Int = noc.object as Int
+        if let tn = top {
+            tn.imgCount(i)
+        }
+    }
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -121,6 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BTN_NANE_FOR_LIST, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BTN_NANE_FOR_EDIT, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_ALERT, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_SET_BADGE, object: nil)
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
@@ -133,7 +139,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "alert:", name: MSG_ALERT, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBar", name: MSG_BAR_SHOW, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBar", name: MSG_BAR_HIDE, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "setGadge:", name: MSG_SET_BADGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imgsShow", name: MSG_IMG_SELECT_SHOW, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imgsHide", name: MSG_IMG_SELECT_HIDE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "tapSetup:", name: MSG_SETUP_DESELECT, object: nil)

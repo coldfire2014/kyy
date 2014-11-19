@@ -199,9 +199,14 @@ class NavView: UIWindow {
         img2edit()
     }
     func goImgOK(){
+        NSNotificationCenter.defaultCenter().postNotificationName(MSG_IMGS_OK, object: nil)
         backEditfromImg()
     }
-
+    func imgCount(i:Int){
+        if let btnRight = self.viewWithTag(103){
+            (btnRight as myImageView).setBadgeValue(i)
+        }
+    }
     func goMain(){
         
     }

@@ -8,8 +8,15 @@
 
 import UIKit
 
-class HeadInput: UIView {
-
+class HeadInput: UIView ,ImgCollectionViewDelegate{
+    var imgs:Array<ALAsset> = [];
+    func didSelectAssets(items:Array<ALAsset>){
+        imgs = items
+        headAdd.changeimg(imgs[0])
+    }
+    func ownAssets()->Array<ALAsset>{
+        return imgs
+    }
     /*
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
@@ -24,7 +31,7 @@ class HeadInput: UIView {
         self.addSubview(headAdd)
         var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "taphead")
         headAdd.addGestureRecognizer(panGesture)
-
+        
     }
     
     required init(coder aDecoder: NSCoder) {

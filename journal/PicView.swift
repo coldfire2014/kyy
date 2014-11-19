@@ -9,7 +9,8 @@
 import UIKit
 
 class PicView: UIView {
-
+    var imgInfo = ALAsset();
+    var assert:AssetHelper = AssetHelper.sharedAssetHelper()
     override init(frame: CGRect) {
         var w = 30.0/2.0
         super.init(frame: frame)
@@ -34,9 +35,10 @@ class PicView: UIView {
         imgLayer.clipsToBounds = true
         self.addSubview(imgLayer)
         ///////////////////////////////
-//        var test:myImageView = myImageView(frame: CGRect(x: 0, y: 0, width: 120.0/2.0, height: 360.0/2.0), name: "bg", scale: 2.0)
-//        test.center = CGPoint(x: 30, y: 30)
-//        imgLayer.addSubview(test)
+        var test = UIImageView(frame: CGRect(x: 0, y: 0, width: 120.0/2.0, height: 120.0/2.0))
+        test.tag = 300
+        test.center = CGPoint(x: 30, y: 30)
+        imgLayer.addSubview(test)
         ////////////////////////////////
         var removeBtn = UIView(frame: CGRect(x: 0, y: 0, width: w, height: w))
         removeBtn.center = CGPoint(x: frame.width - 1.0, y: 1.0)
@@ -60,6 +62,12 @@ class PicView: UIView {
     }
     func tapdel(){
         NSLog("tapdel")
+    }
+    func changeimg(asset:ALAsset) {
+        imgInfo = asset
+        let imgv = self.viewWithTag(300)!
+        var img = assert.getImageFromAsset( imgInfo, type:Int(ASSET_PHOTO_THUMBNAIL) )
+        (imgv as UIImageView).image = img
     }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

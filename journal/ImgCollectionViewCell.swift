@@ -74,9 +74,9 @@ class ImgCollectionViewCell: UICollectionViewCell {
         var btnnil = self.viewWithTag(201)
         if let btn = btnnil{
             if let gc = btn.viewWithTag(203){
-            
+                var cv = (self.superview as UICollectionView)
                 if (gc.hidden) {
-                    var cv = (self.superview as UICollectionView)
+                    
                     var ips = cv.indexPathsForSelectedItems()
                     if ips?.count < maxCount {
                         cv.selectItemAtIndexPath(index,animated:true, scrollPosition:UICollectionViewScrollPosition.None)
@@ -90,16 +90,18 @@ class ImgCollectionViewCell: UICollectionViewCell {
                         moveAnim.removedOnCompletion = true
                         moveAnim.fillMode = kCAFillModeForwards
                         btn.layer.addAnimation(moveAnim, forKey: "s")
+                        NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: cv.indexPathsForSelectedItems()?.count)
                     }else{
                         NSNotificationCenter.defaultCenter().postNotificationName(MSG_ALERT, object: "最多只能选\(maxCount)张哦 !")
                     }
                 }else{
-                    (self.superview as UICollectionView).deselectItemAtIndexPath(index,animated:true)
+                    cv.deselectItemAtIndexPath(index,animated:true)
                     UIView.animateWithDuration(0.2, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
                             gc.alpha = 0
                         }) { (Bool) -> Void in
                             gc.hidden = !gc.hidden
                             gc.alpha = 1
+                            NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: cv.indexPathsForSelectedItems()?.count)
                     }
                 }
             }

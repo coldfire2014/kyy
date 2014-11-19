@@ -32,16 +32,20 @@ class ViewController: UIViewController {
         view.addSubview(bg)
         
         var titleAndDes:InfoInput = InfoInput(frame: CGRect(x: 0, y: 0, width: w, height: 550.0/2.0))
+        titleAndDes.tag = 401
         bg.addSubview(titleAndDes)
         var head:HeadInput = HeadInput(frame: CGRect(x: 36.0/2.0, y: 188.0/2.0, width: 120.0/2.0, height: 120.0/2.0))
+        head.tag = 402
         bg.addSubview(head)
 //        var pic:PicInput = PicInput(frame: CGRect(x: 0, y: 550.0/2.0, width: w, height: (80.0+120.0+24.0/2.0)/2.0))
 //        bg.addSubview(pic)
 //        var music:MusicInput = MusicInput(frame: CGRect(x: 0, y: 894.0/2.0, width: w, height: 140.0/2.0))
 //        bg.addSubview(music)
         var music:MusicInput = MusicInput(frame: CGRect(x: 0, y: 550.0/2.0, width: w, height: 140.0/2.0))
+        music.tag = 403
         bg.addSubview(music)
         var pic:PicInput = PicInput(frame: CGRect(x: 0, y: 675.0/2.0, width: w, height: (80.0+120.0+24.0/2.0)/2.0))
+        pic.tag = 404
         bg.addSubview(pic)
     }
     override func viewDidAppear(animated: Bool) {
@@ -59,10 +63,15 @@ class ViewController: UIViewController {
         if let sid = segue.identifier {
             if sid == "picSelect" {
                 if let obj = (sender as? String) {
+                    var imgView = segue.destinationViewController as ImgCollectionViewController
                     if obj == "head" {
-                        
+                        imgView.maxCount = 1
+                        let head = self.view.viewWithTag(402)!
+                        imgView.delegate = head as HeadInput
                     }else if obj == "imgs" {
-                        
+                        imgView.maxCount = 99
+                        let imgs = self.view.viewWithTag(404)!
+                        imgView.delegate = imgs as PicInput
                     }
                 }
             }else{
