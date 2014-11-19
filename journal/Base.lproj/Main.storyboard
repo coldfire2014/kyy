@@ -20,7 +20,7 @@
                     </view>
                     <connections>
                         <segue destination="Bq7-wU-6qz" kind="modal" identifier="myshow" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="edW-Vd-H6k"/>
-                        <segue destination="cAR-9U-Fu6" kind="modal" identifier="picSelect" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="l2M-OZ-xBR"/>
+                        <segue destination="cAR-9U-Fu6" kind="modal" identifier="picSelect" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="l2M-OZ-xBR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -51,7 +51,7 @@
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="r3l-do-NTz">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="sDz-eX-Oev">
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="0.0" id="sDz-eX-Oev">
                             <size key="itemSize" width="0.0" height="0.0"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -66,7 +66,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FIZ-Sk-tJw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1114" y="-507"/>
+            <point key="canvasLocation" x="1106" y="929"/>
         </scene>
     </scenes>
 </document>

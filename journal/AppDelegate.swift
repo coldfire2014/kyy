@@ -15,7 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var bottom: BottomView?
     var top: NavView?
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
+//        var path = NSBundle.mainBundle().pathForResource("Info", ofType:"plist")
+////        path = [[NSBundle mainBundle] pathForResource:@"info" ofType:"plist"];
+//        if let resources = NSDictionary(contentsOfFile:path!) {
+//            NSLog("%@",resources["CFBundleIdentifier"]! as String )
+//        }
+//        NSLog("%@",NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleIdentifier") as String )
         // Override point for customization after application launch.
         // ========================testRealm========================
 //        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
@@ -44,36 +49,75 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // ========================BaiduMobStat========================
         var f = UIScreen.mainScreen().bounds.size;
         bottom = BottomView(frame: CGRect(x: 0, y: f.height-98.0/2.0, width: f.width, height: 98.0/2.0));
+        if let bn = bottom {
+            bn.changeTitle(true)
+        }
+        
         top = NavView(frame: CGRect(x: 0, y: 0, width: f.width, height: 128.0/2.0));
-        bottom?.changeTitle(true)
         var bg:myImageView = myImageView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: f), name: "bg", scale: 2.0)
-        window?.addSubview(bg)
+        if let wn = window {
+            wn.addSubview(bg)
+        }
         
         return true
     }
     func imgsShow(){
-        bottom?.show(false)
-        top?.change2img()
+        if let bn = bottom {
+            bn.show(false)
+        }
+        if let tn = top {
+            tn.change2img()
+        }
     }
     func imgsHide(){
-        bottom?.show(true)
-        top?.change2edit()
+        if let bn = bottom {
+            bn.show(true)
+        }
     }
     func bottomNametolist(){
-        bottom?.changeTitle(false)
+        if let bn = bottom {
+            bn.changeTitle(false)
+        }
     }
     func bottomNametoedit(){
-        bottom?.changeTitle(true)
+        if let bn = bottom {
+            bn.changeTitle(true)
+        }
     }
+    func tapSetup(noc:NSNotification){
+        var s = noc.object as String
+        if let tn = top {
+            tn.doSetupBy(s)
+        }
+    }
+    func hideBar(){
+        if let bn = bottom {
+            bn.show(false)
+        }
+        if let tn = top {
+            tn.show(false)
+        }
+    }
+    func showBar(){
+        if let bn = bottom {
+            bn.show(true)
+        }
+        if let tn = top {
+            tn.show(true)
+        }
+    }
+
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BAR_SHOW, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BAR_HIDE, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_IMG_SELECT_SHOW, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_IMG_SELECT_HIDE, object: nil)
-        
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_SETUP_DESELECT, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BTN_NANE_FOR_LIST, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BTN_NANE_FOR_EDIT, object: nil)
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
@@ -85,10 +129,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBar", name: MSG_BAR_SHOW, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBar", name: MSG_BAR_HIDE, object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imgsShow", name: MSG_IMG_SELECT_SHOW, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imgsHide", name: MSG_IMG_SELECT_HIDE, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "tapSetup:", name: MSG_SETUP_DESELECT, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "bottomNametolist", name: MSG_BTN_NANE_FOR_LIST, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "bottomNametoedit", name: MSG_BTN_NANE_FOR_EDIT, object: nil)
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.

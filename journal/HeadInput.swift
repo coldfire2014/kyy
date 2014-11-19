@@ -22,8 +22,16 @@ class HeadInput: UIView {
         super.init(frame: frame)
         userInteractionEnabled = true
         self.addSubview(headAdd)
+        var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "taphead")
+        headAdd.addGestureRecognizer(panGesture)
+
     }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func taphead(){
+        NSNotificationCenter.defaultCenter().postNotificationName(MSG_EDIT_HEAD, object: nil)
     }
 }

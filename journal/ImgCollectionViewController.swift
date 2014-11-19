@@ -15,10 +15,11 @@ class ImgCollectionViewController: UICollectionViewController {
     var m_w:Double = 0;
     var assert:AssetHelper = AssetHelper.sharedAssetHelper()
     var sections:Array<NSDictionary> = [];
+    var cells:Array<Array<ALAsset>> = [];
     override func viewDidLoad() {
         super.viewDidLoad()
         var w = UIScreen.mainScreen().bounds.size.width;
-        m_w = (Double(w)-3.0)/4.0
+        m_w = (Double(w)-6.0)/4.0
         // Uncomment the following line to preserve selection between presentations
          self.clearsSelectionOnViewWillAppear = true
 
@@ -26,13 +27,16 @@ class ImgCollectionViewController: UICollectionViewController {
         self.collectionView.registerClass(ImgCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView.registerClass(imgGroupView.self, forSupplementaryViewOfKind:UICollectionElementKindSectionHeader, withReuseIdentifier:hIdentifier)
         self.collectionView.registerClass(imgGroupView.self, forSupplementaryViewOfKind:UICollectionElementKindSectionFooter, withReuseIdentifier:fIdentifier)
-        self.view.backgroundColor = UIColor(white: 0.7, alpha: 1.0)
+        self.view.backgroundColor = UIColor.clearColor()//UIColor(white: 0.7, alpha: 1.0)
         self.collectionView.backgroundColor = UIColor.clearColor()
         self.collectionView.frame = CGRect(origin: CGPoint(x: 0, y: 128.0/2.0), size: CGSize(width: collectionView.frame.width, height: collectionView.frame.height - 128.0/2.0))// - 98.0/2.0
         
         initDate()
-        assert.bReverse = true;
+        assert.bReverse = true
+        self.collectionView.allowsMultipleSelection = true
+        self.collectionView.clipsToBounds = false
         // Do any additional setup after loading the view.
+        
     }
 
     func handleEnterForeground(noc:NSNotification){
@@ -43,21 +47,61 @@ class ImgCollectionViewController: UICollectionViewController {
         assert.getGroupList { (aGroups: [AnyObject]!) -> Void in
             var g_count = aGroups.count
             NSLog("%@",aGroups as NSArray)
-
+            
             self.reloadData()
 
         }
+//        assert.getSavedPhotoList({ (imgs:[AnyObject]!) -> Void in
+//            NSLog("%@",imgs as NSArray)
+//            self.cells = (imgs as NSArray)
+//            self.reloadData()
+//            }, error: { (err:NSError!) -> Void in
+//            
+//        })
     }
     func reloadData(){
         var gc = assert.getGroupCount()
+        sections.removeAll(keepCapacity: true)
+        cells.removeAll(keepCapacity: true)
         for i in 0..<gc {
             var group = assert.getGroupInfo(i) as NSDictionary
             var groupCount = group["count"] as Int
             if groupCount > 0 {
                 sections.append(group)
+                assert.getPhotoListOfGroupByIndex(i, result: { (imgs:[AnyObject]!) -> Void in
+                    self.cells.append(imgs as Array<ALAsset>)
+                })
             }
         }
         self.collectionView.reloadData()
+        var t:CATransform3D = CATransform3DIdentity
+        t.m34 = -1.0/900.0;
+        
+        let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
+        //moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 600)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -100)),NSValue(CATransform3D: t)];
+        moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -600)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 100)),NSValue(CATransform3D: t)];
+        moveAnim.removedOnCompletion = false
+        
+        
+//        let scaleAnim:CABasicAnimation = CABasicAnimation(keyPath: "transform")
+//        scaleAnim.fromValue = NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 1800))
+////        scaleAnim.byValue = NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 400))
+//        scaleAnim.toValue = NSValue(CATransform3D: CATransform3DIdentity)
+//        scaleAnim.removedOnCompletion = false
+        
+        let opacityAnim:CABasicAnimation = CABasicAnimation(keyPath: "alpha")
+        opacityAnim.fromValue = NSNumber(float: 0.0)
+//        opacityAnim.byValue = NSNumber(float: 0.8)
+        opacityAnim.toValue = NSNumber(float: 1.0)
+        opacityAnim.removedOnCompletion = false
+        
+        let animGroup:CAAnimationGroup = CAAnimationGroup()
+        animGroup.animations = [moveAnim,opacityAnim]
+        animGroup.duration = 0.5
+        animGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        animGroup.removedOnCompletion = false
+        animGroup.fillMode = kCAFillModeForwards
+        collectionView.layer.addAnimation(animGroup, forKey: "s")
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -75,6 +119,7 @@ class ImgCollectionViewController: UICollectionViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationWillEnterForegroundNotification, object: nil)
     }
     func back(){
+        NSLog("%@",collectionView.indexPathsForSelectedItems()!)
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             
         })
@@ -93,10 +138,9 @@ class ImgCollectionViewController: UICollectionViewController {
 
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         //#warning Incomplete method implementation -- Return the number of sections
+        NSLog("sections=%d" ,sections.count as Int)
         return sections.count as Int
     }
-
-//    override func collectionView(collectionView: UICollectionView, v
 
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //#warning Incomplete method implementation -- Return the number of items in the section
@@ -104,15 +148,36 @@ class ImgCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as UICollectionViewCell
-        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath) as ImgCollectionViewCell
+        var ar = self.cells[indexPath.section] as Array<ALAsset>
+        var al = ar[indexPath.row] as ALAsset
+        var img = assert.getImageFromAsset( al, type:Int(ASSET_PHOTO_THUMBNAIL) )
+        if let imgv = cell.viewWithTag(202) {
+            (imgv as myImageView).image = img
+        }
+        cell.index = indexPath
+        cell.asset = al
         return cell
     }
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) -> Void {
+//        var ar = self.cells[indexPath.section] as Array<ALAsset>
+//        var al = ar[indexPath.row] as ALAsset
+//        
+//        var cell = collectionView.cellForItemAtIndexPath(indexPath)!
+//        var local = cell.center
+//        var width = cell.frame.width
+//        var img = assert.getImageFromAsset( al, type:Int(ASSET_PHOTO_SCREEN_SIZE) )
+//        var iwidth = img.size.width
+//        var iheight = img.size.height
+//        if let imgv = cell.viewWithTag(875) {
+//            (imgv as myImageView).image = img
+//        }
+    }
     
-    func collectionView(collectionView: UICollectionView,layout:UICollectionViewLayout,referenceSizeForFooterInSection:Int) ->CGSize{
-        var f = UIScreen.mainScreen().bounds.size;
-        return CGSize(width:f.width,height:36.0/2.0)
-        
+    
+    // Uncomment this method to specify if the specified item should be selected
+    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
     }
     override func collectionView(collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -123,33 +188,31 @@ class ImgCollectionViewController: UICollectionViewController {
                     withReuseIdentifier:hIdentifier,
                     forIndexPath: indexPath) as imgGroupView
                 var s = sections[indexPath.section]["name"] as String
-                headerView.title.text = s
+                var c = sections[indexPath.section]["count"] as Int
+                headerView.title.text = ""+s+" 共 \(c) 张照片"
                 return headerView
             }else{
                 let footerView:imgGroupView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionFooter,
                     withReuseIdentifier:fIdentifier,
                     forIndexPath: indexPath) as imgGroupView
-                var s = sections[indexPath.section]["count"] as Int
-                footerView.title.text = "共 \(s) 张照片"
+                var s = sections[indexPath.section]["name"] as String
+                var c = sections[indexPath.section]["count"] as Int
+                footerView.title.text = ""+s+" 共 \(c) 张照片"
                 footerView.title.textAlignment = .Center
                 return footerView
             }
     }
     func collectionView(collectionView: UICollectionView,layout:UICollectionViewLayout,referenceSizeForHeaderInSection:Int) ->CGSize{
         var f = UIScreen.mainScreen().bounds.size;
-        return CGSize(width:f.width,height:48.0/2.0)
+        return CGSizeZero//CGSize(width:f.width,height:48.0/2.0)
         
     }
-    func collectionView(collectionView: UICollectionView,layout:UICollectionViewLayout,minimumInteritemSpacingForSectionAtIndex:NSIndexPath) ->CGFloat{
-        
-        return 0
-        
-    }
-    func collectionView(collectionView: UICollectionView,layout:UICollectionViewLayout,minimumLineSpacingForSectionAtIndex:NSIndexPath) ->CGFloat{
-        
-        return 1.0
+    func collectionView(collectionView: UICollectionView,layout:UICollectionViewLayout,referenceSizeForFooterInSection:Int) ->CGSize{
+        var f = UIScreen.mainScreen().bounds.size;
+        return CGSize(width:f.width,height:80.0/2.0)
         
     }
+
     func collectionView(collectionView: UICollectionView,layout:UICollectionViewLayout,sizeForItemAtIndexPath:NSIndexPath) ->CGSize{
         
         return CGSize(width:m_w,height:m_w)
@@ -164,13 +227,7 @@ class ImgCollectionViewController: UICollectionViewController {
         return true
     }
     */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    */
+    
 
     /*
     // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item

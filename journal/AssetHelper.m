@@ -43,18 +43,16 @@
     {
         [group setAssetsFilter:[ALAssetsFilter allPhotos]];
         
-
         if (group == nil)
         {
             if (_bReverse)
                 _assetGroups = [[NSMutableArray alloc] initWithArray:[[_assetGroups reverseObjectEnumerator] allObjects]];
-            
             // end of enumeration
             result(_assetGroups);
             return;
         }
         
-        if ([group numberOfAssets] > 1) {
+        if ([group numberOfAssets] >= 1) {
             [_assetGroups addObject:group];
         }
         

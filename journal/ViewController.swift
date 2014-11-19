@@ -43,17 +43,29 @@ class ViewController: UIViewController {
         bg.addSubview(music)
         var pic:PicInput = PicInput(frame: CGRect(x: 0, y: 675.0/2.0, width: w, height: (80.0+120.0+24.0/2.0)/2.0))
         bg.addSubview(pic)
-        var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "didtap")
-        view.addGestureRecognizer(panGesture)
-//        imv.frame = CGRect(x: 100, y: 100, width: 10, height: 10)
-//        imv.backgroundColor = UIColor.redColor()
-//        view .addSubview(imv)
     }
     override func viewDidAppear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showMy", name: MSG_MY_SHOW, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "taphead", name: MSG_EDIT_HEAD, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "tapimgs", name: MSG_EDIT_IMGS, object: nil)
     }
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_MY_SHOW, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_MY_SHOW, object: nil)
+    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let sid = segue.identifier {
+            if sid == "picSelect" {
+                if let obj = (sender as? String) {
+                    if obj == "head" {
+                        
+                    }else if obj == "imgs" {
+                        
+                    }
+                }
+            }else{
+                //mark 其他页面
+            }
+        }
     }
     func showMy(){
         var timer = NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: Selector("myShow"), userInfo: nil, repeats: false)
@@ -62,16 +74,18 @@ class ViewController: UIViewController {
         NSNotificationCenter.defaultCenter().postNotificationName(MSG_BTN_NANE_FOR_LIST, object: nil)
         self.performSegueWithIdentifier("myshow", sender: nil)
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    func didtap(){
-//        var bar: StatusBar = StatusBar.shareInstance()
-//        bar.talkMsg("hello Bar!!!", time: 1.5)
+    func taphead(){
         NSNotificationCenter.defaultCenter().postNotificationName(MSG_IMG_SELECT_SHOW, object: nil)
-        
-        self.performSegueWithIdentifier("picSelect", sender: nil)
+        self.performSegueWithIdentifier("picSelect", sender: "head")
+    }
+    func tapimgs(){
+        NSNotificationCenter.defaultCenter().postNotificationName(MSG_IMG_SELECT_SHOW, object: nil)
+        self.performSegueWithIdentifier("picSelect", sender: "imgs")
     }
     func changeUIView4(){
         let path:UIBezierPath = UIBezierPath()

@@ -36,10 +36,17 @@ class PicInput: UIView {
             var k = i % 4
             var j = i / 4
             var headAdd:PicView = PicView(frame: CGRect(x: 36.0/2.0 + CGFloat(k) * w, y: 80.0/2.0 + CGFloat(j) * (24.0/2.0 + 120.0/2.0), width: 120.0/2.0, height: 120.0/2.0))
-            headAdd.tag = 404+i
+            headAdd.tag = 301+i
             self.addSubview(headAdd)
+            var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapimgs")
+            headAdd.addGestureRecognizer(panGesture)
         }
     }
+    
+    func tapimgs(){
+        NSNotificationCenter.defaultCenter().postNotificationName(MSG_EDIT_IMGS, object: nil)
+    }
+    
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

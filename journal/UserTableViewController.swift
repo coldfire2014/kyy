@@ -9,17 +9,23 @@
 import UIKit
 
 class UserTableViewController: UITableViewController {
-
+    let cellIdentifier = "CELL_ID"
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.tableHeaderView = UIView(frame: CGRect(origin: CGPointZero, size: CGSize(width: view.bounds.size.width, height: 128.0/2.0)))
-        self.tableView.tableHeaderView?.backgroundColor = UIColor.clearColor()
+        if let hv = self.tableView.tableHeaderView {
+            hv.backgroundColor = UIColor.clearColor()
+        }
         self.tableView.tableFooterView = UIView(frame: CGRect(origin: CGPointZero, size: CGSize(width: view.bounds.size.width, height: 98.0/2.0)))
-        self.tableView.tableFooterView?.backgroundColor = UIColor.clearColor()
+        if let fv = self.tableView.tableFooterView {
+            fv.backgroundColor = UIColor.clearColor()
+        }
         // Uncomment the following line to preserve selection between presentations
         self.clearsSelectionOnViewWillAppear = true
         view.backgroundColor = UIColor.clearColor()
         self.tableView.separatorStyle = .None
+        self.tableView.registerClass(UserTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+    
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
@@ -36,37 +42,38 @@ class UserTableViewController: UITableViewController {
         var index:Double = Double(indexPath.row)
         var th:Double = Double( UIScreen.mainScreen().bounds.size.height - 128.0/2.0 )
         var c = (cell as UserTableViewCell)
-        var bk = c.bk
-        if th > index*192.0/2.0{
-            let x = bk.frame.origin.x
-            if true {
-                bk.frame.origin.x = 0.0
-                let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "position.x")
-                moveAnim.values = []
-                if count_i <= Int(indexPath.row){
-                    for i in 0..<Int(indexPath.row) {
-                        moveAnim.values.append(-bk.frame.size.width/2.0)
+        if let bk = c.viewWithTag(502) {
+            if th > index*192.0/2.0{
+                let x = bk.frame.origin.x
+                if true {
+                    bk.frame.origin.x = 0.0
+                    let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "position.x")
+                    moveAnim.values = []
+                    if count_i <= Int(indexPath.row){
+                        for i in 0..<Int(indexPath.row) {
+                            moveAnim.values.append(-bk.frame.size.width/2.0)
+                        }
+                        moveAnim.values.append(-bk.frame.size.width/4.0)
+                        moveAnim.values.append(bk.frame.size.width/4.0)
+                        moveAnim.values.append(bk.frame.size.width/2.0+10.0)
+                        moveAnim.values.append(bk.frame.size.width/2.0-2.0)
+                        moveAnim.values.append(bk.frame.size.width/2.0)
+                        moveAnim.delegate = self
+                    }else{
+                        moveAnim.values.append(bk.frame.size.width/2.0)
                     }
-                    moveAnim.values.append(-bk.frame.size.width/4.0)
-                    moveAnim.values.append(bk.frame.size.width/4.0)
-                    moveAnim.values.append(bk.frame.size.width/2.0+10.0)
-                    moveAnim.values.append(bk.frame.size.width/2.0-2.0)
-                    moveAnim.values.append(bk.frame.size.width/2.0)
-                    moveAnim.delegate = self
+                    moveAnim.removedOnCompletion = true
+                    moveAnim.duration = (0.4 + index*0.1)
+                    bk.layer.addAnimation(moveAnim, forKey: "s")
+                    
                 }else{
-                    moveAnim.values.append(bk.frame.size.width/2.0)
+                    
                 }
-                moveAnim.removedOnCompletion = true
-                moveAnim.duration = (0.4 + index*0.1)
-                bk.layer.addAnimation(moveAnim, forKey: "s")
-                
             }else{
                 
             }
-        }else{
-            
+            bk.frame.origin.x = 0.0
         }
-        bk.frame.origin.x = 0.0
     }
     override func viewWillDisappear(animated: Bool) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: MSG_BACK, object: nil)
@@ -107,16 +114,16 @@ class UserTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell : UserTableViewCell? = tableView.dequeueReusableCellWithIdentifier("CELL_ID") as? UserTableViewCell
-        if(cell == nil)
+        var celln : UserTableViewCell? = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as UserTableViewCell?
+        if(celln == nil)
         {
-            cell = UserTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "CELL_ID")
+            celln = UserTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "CELL_ID")
         }
-        
-        cell?.selectionStyle = .None
-        // Configure the cell...
-
-        return cell! as UITableViewCell
+        if let cell = celln {
+            
+            cell.selectionStyle = .None
+        }
+        return celln! as UITableViewCell
     }
 
 

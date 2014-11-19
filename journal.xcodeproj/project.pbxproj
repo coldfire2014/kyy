@@ -67,6 +67,7 @@
 		E56C6F6C1A123E8C00163C25 /* UserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56C6F6B1A123E8C00163C25 /* UserTableViewController.swift */; };
 		E56C6F701A12478700163C25 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56C6F6F1A12478700163C25 /* UserTableViewCell.swift */; };
 		E56EC4FE1A0728EE004CBEF1 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E56EC4FD1A0728EE004CBEF1 /* libc++.dylib */; };
+		E57F65CB1A1AD79E0034A2A4 /* perviewImg.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F65CA1A1AD79E0034A2A4 /* perviewImg.swift */; };
 		E58886141A135EA300FE394C /* 00.png in Resources */ = {isa = PBXBuildFile; fileRef = E58886131A135EA300FE394C /* 00.png */; };
 		E5971B651A104F6C00733DD7 /* bottom.png in Resources */ = {isa = PBXBuildFile; fileRef = E5971B631A104F6C00733DD7 /* bottom.png */; };
 		E5971B661A104F6C00733DD7 /* fx.png in Resources */ = {isa = PBXBuildFile; fileRef = E5971B641A104F6C00733DD7 /* fx.png */; };
@@ -184,6 +185,7 @@
 		E56C6F6B1A123E8C00163C25 /* UserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewController.swift; sourceTree = "<group>"; };
 		E56C6F6F1A12478700163C25 /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		E56EC4FD1A0728EE004CBEF1 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		E57F65CA1A1AD79E0034A2A4 /* perviewImg.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = perviewImg.swift; sourceTree = "<group>"; };
 		E58886131A135EA300FE394C /* 00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 00.png; sourceTree = SOURCE_ROOT; };
 		E5971B631A104F6C00733DD7 /* bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bottom.png; path = skin/bottom.png; sourceTree = SOURCE_ROOT; };
 		E5971B641A104F6C00733DD7 /* fx.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fx.png; path = skin/fx.png; sourceTree = SOURCE_ROOT; };
@@ -374,9 +376,9 @@
 		E56390691A071D770041FCBC /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				E5291A151A0732D2009694C0 /* journal-Bridging-Header.h */,
 				E5971B701A10999700733DD7 /* Asset */,
 				E56737B91A08A37D0059B918 /* baidu */,
-				E5291A151A0732D2009694C0 /* journal-Bridging-Header.h */,
 				E52919FB1A07325C009694C0 /* UIKit+AFNetworking */,
 				E52919DE1A073249009694C0 /* AFNetworking */,
 				E56EC4F61A072854004CBEF1 /* realm */,
@@ -482,6 +484,7 @@
 				E5BAE33B1A133BE80099EB3E /* ImgCollectionViewController.swift */,
 				E5BAE33D1A133C000099EB3E /* ImgCollectionViewCell.swift */,
 				E5A6F2E31A14E4B50074B803 /* imgGroupView.swift */,
+				E57F65CA1A1AD79E0034A2A4 /* perviewImg.swift */,
 			);
 			name = PicSelect;
 			sourceTree = "<group>";
@@ -658,6 +661,7 @@
 				E56C6F701A12478700163C25 /* UserTableViewCell.swift in Sources */,
 				E52919FA1A073249009694C0 /* AFURLSessionManager.m in Sources */,
 				E52919F81A073249009694C0 /* AFURLRequestSerialization.m in Sources */,
+				E57F65CB1A1AD79E0034A2A4 /* perviewImg.swift in Sources */,
 				E5BAE33C1A133BE80099EB3E /* ImgCollectionViewController.swift in Sources */,
 				E5CEA1951A10BAF000907F04 /* HeadInput.swift in Sources */,
 				E54BF8C41A0655710044BE3F /* StatusBar.swift in Sources */,
