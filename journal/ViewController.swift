@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController ,UIViewControllerTransitioningDelegate{
     var imv:UIView = UIView()
     
     override func prefersStatusBarHidden() -> Bool {
@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         AssetHelper.sharedAssetHelper()
+        
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = UIColor.clearColor()
         view.userInteractionEnabled = true
@@ -48,6 +49,7 @@ class ViewController: UIViewController {
         pic.tag = 404
         bg.addSubview(pic)
     }
+
     override func viewDidAppear(animated: Bool) {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "taphead", name: MSG_EDIT_HEAD, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "tapimgs", name: MSG_EDIT_IMGS, object: nil)
@@ -126,5 +128,33 @@ class ViewController: UIViewController {
         animGroup.fillMode = kCAFillModeForwards
 //        imv.layer.addAnimation(animGroup, forKey: "s")
     }
+    
+    ///////////////////////////////////////////////////////////
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        var str = presented.classForCoder.description()
+        if let range = str.rangeOfString("ImgCollectionViewController")   {
+            return picViewAnimate(p:true)
+        }else{
+            return nil
+        }
+    }
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        var str = dismissed.classForCoder.description()
+        if let range = str.rangeOfString("ImgCollectionViewController")   {
+            return picViewAnimate(p:false)
+        }else{
+            return nil
+        }
+    }
+    
+    ////切换动画，进度控制
+//    tran.updateInteractiveTransition(0.9)
+//    tran.finishInteractiveTransition()
+//    tran.cancelInteractiveTransition()
+//    var tran:UIPercentDrivenInteractiveTransition = UIPercentDrivenInteractiveTransition()
+//    func interactionControllerForPresentation(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning?{
+//        return tran
+//    }
+    //end
 }
 

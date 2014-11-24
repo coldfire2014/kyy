@@ -8,9 +8,14 @@
 
 import UIKit
 
+enum BarShowType : Int {
+    case OnlyNav
+    case OnlyTool
+    case All
+}
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
+class AppDelegate: UIResponder, UIApplicationDelegate, WXApiDelegate{
+    var scene: WXScene = WXSceneSession
     var window: UIWindow?
     var bottom: BottomView?
     var top: NavView?
@@ -50,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var f = UIScreen.mainScreen().bounds.size;
         bottom = BottomView(frame: CGRect(x: 0, y: f.height-98.0/2.0, width: f.width, height: 98.0/2.0));
         if let bn = bottom {
-            bn.changeTitle(true)
+            bn.changeTitle("")
         }
         
         top = NavView(frame: CGRect(x: 0, y: 0, width: f.width, height: 128.0/2.0));
@@ -58,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let wn = window {
             wn.addSubview(bg)
         }
-        
+        WXApi.registerApp(WX_APPID, withDescription: "kyy")
         return true
     }
     func imgsShow(){
@@ -76,12 +81,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func bottomNametolist(){
         if let bn = bottom {
-            bn.changeTitle(false)
+            bn.changeTitle("编辑杂志")
         }
     }
     func bottomNametoedit(){
         if let bn = bottom {
-            bn.changeTitle(true)
+            bn.changeTitle("新建杂志")
+        }
+    }
+    func bottomNameClean(){
+        if let bn = bottom {
+            bn.changeTitle("")
         }
     }
     func tapSetup(noc:NSNotification){
@@ -90,20 +100,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             tn.doSetupBy(s)
         }
     }
-    func hideBar(){
-        if let bn = bottom {
-            bn.show(false)
-        }
-        if let tn = top {
-            tn.show(false)
+    func hideBar(noc:NSNotification){
+        var only:BarShowType = BarShowType(rawValue: noc.object as Int)!
+        switch only {
+        case .OnlyNav:
+            if let tn = top {
+                tn.show(false)
+            }
+        case .OnlyTool:
+            if let bn = bottom {
+                bn.show(false)
+            }
+        default:
+            if let bn = bottom {
+                bn.show(false)
+            }
+            if let tn = top {
+                tn.show(false)
+            }
         }
     }
-    func showBar(){
-        if let bn = bottom {
-            bn.show(true)
-        }
-        if let tn = top {
-            tn.show(true)
+    func showBar(noc:NSNotification){
+        var only:BarShowType = BarShowType(rawValue: noc.object as Int)!
+        switch only {
+        case .OnlyNav:
+            if let tn = top {
+                tn.show(true)
+            }
+        case .OnlyTool:
+            if let bn = bottom {
+                bn.show(true)
+            }
+        default:
+            if let bn = bottom {
+                bn.show(true)
+            }
+            if let tn = top {
+                tn.show(true)
+            }
         }
     }
     func setGadge(noc:NSNotification){
@@ -137,8 +171,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "alert:", name: MSG_ALERT, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBar", name: MSG_BAR_SHOW, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBar", name: MSG_BAR_HIDE, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBar:", name: MSG_BAR_SHOW, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBar:", name: MSG_BAR_HIDE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "setGadge:", name: MSG_SET_BADGE, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imgsShow", name: MSG_IMG_SELECT_SHOW, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "imgsHide", name: MSG_IMG_SELECT_HIDE, object: nil)
@@ -155,6 +189,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func alert(noc:NSNotification){
         var s = noc.object as String
         StatusBar.shareInstance().talkMsg(s, time: 0.8)
+    }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        var isSuc = WXApi.handleOpenURL(url, delegate: self)
+        NSLog("url=%@", url)
+        return isSuc
+    }
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        var isSuc = WXApi.handleOpenURL(url, delegate: self)
+        NSLog("url=%@", url)
+        return isSuc
+    }
+    func onReq(req: BaseReq!) {
+        var str = req.classForCoder.description()
+        if let range = str.rangeOfString("GetMessageFromWXReq")   {
+            NSLog("微信请求App提供内容=%@", req)
+        }else if let range = str.rangeOfString("ShowMessageFromWXReq")   {
+            NSLog("微信请求App显示内容=%@", (req as ShowMessageFromWXReq).message)
+        }else if let range = str.rangeOfString("LaunchFromWXReq")   {
+            NSLog("微信请求App启动内容=%@", req)
+        }
+    }
+    func onResp(resp: BaseResp!) {
+        var str = resp.classForCoder.description()
+        if let range = str.rangeOfString("SendMessageToWXResp")   {
+            if 0 == resp.errCode {
+                
+                NSLog("分享成功，%@", (resp as SendMessageToWXResp).lang)
+                StatusBar.shareInstance().talkMsg("分享成功", time: 0.5)
+            }else{
+                StatusBar.shareInstance().talkMsg(resp.errStr, time: 0.8)
+            }
+        }else{
+            if 0 == resp.errCode {
+                //开始登陆微信《提示等待》
+                getOpenIDfromWX((resp as SendAuthResp).code)
+            }else{
+                StatusBar.shareInstance().talkMsg(resp.errStr, time: 0.8)
+            }
+        }
+    }
+    
+    func getOpenIDfromWX(code:String){
+        var h:httpManager = httpManager();
+        h.loginWX(code)
     }
 }
 

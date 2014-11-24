@@ -70,6 +70,21 @@ class ImgCollectionViewCell: UICollectionViewCell {
         
         self.window?.addSubview(img)
     }
+    func checkSelect(){//考虑被调用地点，目前不合适（有已选项目时）
+        let gc = self.viewWithTag(203)!
+        gc.hidden = true
+        if let cv = self.superview {
+            if let ips = (cv as UICollectionView).indexPathsForSelectedItems() {
+                if (ips as NSArray).containsObject(index) {
+                    gc.hidden = false
+                }
+            }
+        }
+    }
+    func setSelect(){
+        let gc = self.viewWithTag(203)!
+        gc.hidden = false
+    }
     func didtap(){
         var btnnil = self.viewWithTag(201)
         if let btn = btnnil{

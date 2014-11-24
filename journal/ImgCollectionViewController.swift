@@ -18,26 +18,29 @@ protocol ImgCollectionViewDelegate : NSObjectProtocol {
 class ImgCollectionViewController: UICollectionViewController {
     weak var delegate: ImgCollectionViewDelegate?
     var m_w:Double = 0;
+    var needAnimation = false
     var assert:AssetHelper = AssetHelper.sharedAssetHelper()
     var sections:Array<NSDictionary> = [];
     var cells:Array<Array<ALAsset>> = [];
     var maxCount = 1
-    var selectItems:Array<NSIndexPath> = [];
+    var selectItems:Array<ALAsset> = [];
+    var selectIndexs:Array<NSIndexPath> = [];
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        var w = UIScreen.mainScreen().bounds.size.width;
+        var w = UIScreen.mainScreen().bounds.size.width
+        var h = UIScreen.mainScreen().bounds.size.height
         m_w = (Double(w)-6.0)/4.0
         // Uncomment the following line to preserve selection between presentations
-         self.clearsSelectionOnViewWillAppear = true
-
+        self.clearsSelectionOnViewWillAppear = true
+        self.view.frame = CGRect(origin: CGPointZero, size: CGSize(width: view.frame.width, height: h))
         // Register cell classes
         self.collectionView.registerClass(ImgCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView.registerClass(imgGroupView.self, forSupplementaryViewOfKind:UICollectionElementKindSectionHeader, withReuseIdentifier:hIdentifier)
         self.collectionView.registerClass(imgGroupView.self, forSupplementaryViewOfKind:UICollectionElementKindSectionFooter, withReuseIdentifier:fIdentifier)
-        self.view.backgroundColor = UIColor.clearColor()//UIColor(white: 0.7, alpha: 1.0)
+        self.view.backgroundColor = UIColor.clearColor()//UIColor(red: 220.0/255.0, green: 248.0/255.0, blue: 254.0/255.0, alpha: 1.0)
         self.collectionView.backgroundColor = UIColor.clearColor()
-        self.collectionView.frame = CGRect(origin: CGPoint(x: 0, y: 128.0/2.0), size: CGSize(width: collectionView.frame.width, height: collectionView.frame.height - 128.0/2.0))// - 98.0/2.0
+        self.collectionView.frame = CGRect(origin: CGPoint(x: 0, y: 128.0/2.0), size: CGSize(width: collectionView.frame.width, height: h - 128.0/2.0))// - 98.0/2.0
         
         initDate()
         assert.bReverse = true
@@ -55,6 +58,11 @@ class ImgCollectionViewController: UICollectionViewController {
     }
     
     func initDate(){
+        if let sels = self.delegate?.ownAssets() {
+            var c=sels.count
+            selectItems = sels
+        }
+        
         assert.getGroupList { (aGroups: [AnyObject]!) -> Void in
             var g_count = aGroups.count
             NSLog("%@",aGroups as NSArray)
@@ -85,34 +93,36 @@ class ImgCollectionViewController: UICollectionViewController {
             }
         }
         self.collectionView.reloadData()
-        var t:CATransform3D = CATransform3DIdentity
-        t.m34 = -1.0/900.0;
-        
-        let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
-        //moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 600)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -100)),NSValue(CATransform3D: t)];
-        moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -600)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 100)),NSValue(CATransform3D: t)];
-        moveAnim.removedOnCompletion = false
-        
-        
-//        let scaleAnim:CABasicAnimation = CABasicAnimation(keyPath: "transform")
-//        scaleAnim.fromValue = NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 1800))
-////        scaleAnim.byValue = NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 400))
-//        scaleAnim.toValue = NSValue(CATransform3D: CATransform3DIdentity)
-//        scaleAnim.removedOnCompletion = false
-        
-        let opacityAnim:CABasicAnimation = CABasicAnimation(keyPath: "alpha")
-        opacityAnim.fromValue = NSNumber(float: 0.0)
-//        opacityAnim.byValue = NSNumber(float: 0.8)
-        opacityAnim.toValue = NSNumber(float: 1.0)
-        opacityAnim.removedOnCompletion = false
-        
-        let animGroup:CAAnimationGroup = CAAnimationGroup()
-        animGroup.animations = [moveAnim,opacityAnim]
-        animGroup.duration = 0.5
-        animGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        animGroup.removedOnCompletion = false
-        animGroup.fillMode = kCAFillModeForwards
-        collectionView.layer.addAnimation(animGroup, forKey: "s")
+        if needAnimation {
+            var t:CATransform3D = CATransform3DIdentity
+            t.m34 = -1.0/900.0;
+            let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
+            moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -600)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 100)),NSValue(CATransform3D: t)];
+            moveAnim.removedOnCompletion = false
+            let opacityAnim:CABasicAnimation = CABasicAnimation(keyPath: "alpha")
+            opacityAnim.fromValue = NSNumber(float: 0.0)
+            opacityAnim.toValue = NSNumber(float: 1.0)
+            opacityAnim.removedOnCompletion = false
+            
+            let animGroup:CAAnimationGroup = CAAnimationGroup()
+            animGroup.animations = [moveAnim,opacityAnim]
+            animGroup.duration = 0.5
+            animGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+            animGroup.removedOnCompletion = false
+            animGroup.fillMode = kCAFillModeForwards
+            animGroup.delegate = self
+            collectionView.layer.addAnimation(animGroup, forKey: "s")
+        }
+    }
+    override func animationDidStop(anim:CAAnimation ,finished flag:Bool){
+        for index in selectIndexs {
+            self.collectionView.selectItemAtIndexPath(index,animated:false, scrollPosition:UICollectionViewScrollPosition.None)
+        }
+        if let ips = self.collectionView.indexPathsForSelectedItems() {
+            selectItems.removeAll(keepCapacity: false)
+            selectIndexs.removeAll(keepCapacity: false)
+            NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: ips.count)
+        }
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -145,7 +155,9 @@ class ImgCollectionViewController: UICollectionViewController {
                         var al = ar[indexPath.row] as ALAsset
                         als.append(al)
                     }
-                    self.delegate?.didSelectAssets(als)
+                    if als.count > 0 {
+                        self.delegate?.didSelectAssets(als)
+                    }
                 }
             }
         })
@@ -184,6 +196,15 @@ class ImgCollectionViewController: UICollectionViewController {
         cell.index = indexPath
         cell.asset = al
         cell.maxCount = self.maxCount
+        cell.checkSelect()
+        if selectItems.count > 0{
+            for item in selectItems {
+                if al.description == item.description {
+                    selectIndexs.append(indexPath)
+                    cell.setSelect()
+                }
+            }
+        }
         return cell
     }
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) -> Void {
@@ -204,6 +225,7 @@ class ImgCollectionViewController: UICollectionViewController {
     
     // Uncomment this method to specify if the specified item should be selected
     override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        
         return true
     }
     override func collectionView(collectionView: UICollectionView,

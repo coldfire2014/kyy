@@ -93,7 +93,8 @@ class perviewImg: UIView {
         let img = bk.viewWithTag(206)!
         img.center = CGPoint(x:self.bigSize.width/2.0,y:self.bigSize.height/2.0)
         img.bounds = CGRect(origin:CGPointZero,size:self.bigSize)
-        NSNotificationCenter.defaultCenter().postNotificationName(MSG_BAR_HIDE, object: nil)
+        var obj:Int = BarShowType.OnlyNav.rawValue
+        NSNotificationCenter.defaultCenter().postNotificationName(MSG_BAR_HIDE, object: obj)
         
         var t:CATransform3D = CATransform3DIdentity
         var d = smallSize.height / bigSize.height
@@ -120,7 +121,8 @@ class perviewImg: UIView {
     }
     func didbig(){
         self.userInteractionEnabled = false
-        NSNotificationCenter.defaultCenter().postNotificationName(MSG_BAR_SHOW, object: nil)
+        var obj:Int = BarShowType.OnlyNav.rawValue
+        NSNotificationCenter.defaultCenter().postNotificationName(MSG_BAR_SHOW, object: obj)
         let bk = self.viewWithTag(205)!
         let img = bk.viewWithTag(206)!
         var d = smallSize.height / bigSize.height

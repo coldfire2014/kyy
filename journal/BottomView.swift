@@ -12,10 +12,14 @@ class BottomView: UIWindow {
     var title:UILabel = UILabel()
     let newTitle = "新建杂志"
     let editTitle = "编辑杂志"
+    var showframe = CGRectZero
+    var hideframe = CGRectZero
     override init(frame: CGRect) {
         super.init(frame:frame)
         windowLevel = UIWindowLevelNormal+1.0
         self.frame = frame;
+        showframe = frame
+        hideframe = CGRectOffset(frame, 0, frame.height)
         self.backgroundColor = UIColor.clearColor()
         self.alpha = 1.0
         self.hidden = false;
@@ -29,26 +33,28 @@ class BottomView: UIWindow {
         bk.addSubview(title)
         var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "didtap")
         bk.addGestureRecognizer(panGesture)
+        var top = (frame.size.height - 88.0/2.0)/2.0
+        var btnRight = UIView(frame: CGRect(x: frame.size.width - top - 88.0/2.0, y: top, width: 88.0/2.0, height: 88.0/2.0))
+        btnRight.backgroundColor = UIColor.blackColor()
+//        btnRight.layer.cornerRadius = 88.0/4.0
+        
+        bk.addSubview(btnRight)
     }
     func show(show:Bool){
         UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
             if(show){
-                self.frame.offset(dx: 0, dy: -98.0/2.0)
+                self.frame = self.showframe
             }else{
-                self.frame.offset(dx: 0, dy: 98.0/2.0)
+                self.frame = self.hideframe
             }
             }) { (Bool) -> Void in
 
         }
     }
 
-    func changeTitle(isNew:Bool){
+    func changeTitle(title:String){
         UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
-            if(isNew){
-                self.title.text = self.newTitle
-            }else{
-                self.title.text = self.editTitle
-            }
+            self.title.text = title
             }) { (Bool) -> Void in
                 
         }

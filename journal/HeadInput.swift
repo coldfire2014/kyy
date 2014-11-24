@@ -11,8 +11,10 @@ import UIKit
 class HeadInput: UIView ,ImgCollectionViewDelegate{
     var imgs:Array<ALAsset> = [];
     func didSelectAssets(items:Array<ALAsset>){
-        imgs = items
-        headAdd.changeimg(imgs[0])
+        if items.count > 0 {
+            imgs = items
+            headAdd.changeimg(imgs[0])
+        }
     }
     func ownAssets()->Array<ALAsset>{
         return imgs
@@ -31,7 +33,6 @@ class HeadInput: UIView ,ImgCollectionViewDelegate{
         self.addSubview(headAdd)
         var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "taphead")
         headAdd.addGestureRecognizer(panGesture)
-        
     }
     
     required init(coder aDecoder: NSCoder) {

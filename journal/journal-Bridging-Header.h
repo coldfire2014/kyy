@@ -3,6 +3,12 @@
 #import "UIKit+AFNetworking.h"
 #import "BaiduMobStat.h"
 #import "AssetHelper.h"
+#import "WXApi.h"
+#import "WXApiObject.h"
+
+#define WX_APPID "wx06ea6c3bc82c99ac"
+#define WX_SECRET "1e9e5b207389d2959a43ad203f74a6fd"
+
 #define MSG_ALERT "MSG_ALERT"
 #define MSG_SET_BADGE "MSG_SET_BADGE"
 #define MSG_BACK "MSG_BACK"
@@ -39,5 +45,4 @@
 
 #define TAG_ULIST_MAEK 501
 #define TAG_ULIST_BK 502
-
 
