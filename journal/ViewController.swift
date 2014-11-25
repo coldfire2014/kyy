@@ -133,19 +133,19 @@ class ViewController: UIViewController ,UIViewControllerTransitioningDelegate{
     ///////////////////////////////////////////////////////////
     func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         var str = presented.classForCoder.description()
-        if let range = str.rangeOfString("ImgCollectionViewController")   {
-            return picViewAnimate(p:true)
-        }else{
+//        if let range = str.rangeOfString("ImgCollectionViewController")   {
+//            return picViewAnimate(p:true)
+//        }else{
             return nil
-        }
+//        }
     }
     func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         var str = dismissed.classForCoder.description()
-        if let range = str.rangeOfString("ImgCollectionViewController")   {
-            return picViewAnimate(p:false)
-        }else{
+//        if let range = str.rangeOfString("ImgCollectionViewController")   {
+//            return picViewAnimate(p:false)
+//        }else{
             return nil
-        }
+//        }
     }
     
     ////切换动画，进度控制

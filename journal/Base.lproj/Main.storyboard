@@ -20,7 +20,7 @@
                     </view>
                     <connections>
                         <segue destination="Bq7-wU-6qz" kind="custom" identifier="myshow" customClass="userSegue" customModule="journal" customModuleProvider="target" id="edW-Vd-H6k"/>
-                        <segue destination="cAR-9U-Fu6" kind="custom" identifier="picSelect" customClass="picSelectSegue" customModule="journal" customModuleProvider="target" id="l2M-OZ-xBR"/>
+                        <segue destination="cAR-9U-Fu6" kind="custom" identifier="picSelect" customClass="picSelectSegue" customModule="journal" id="l2M-OZ-xBR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

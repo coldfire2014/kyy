@@ -46,11 +46,10 @@ class BottomView: UIWindow {
         var panGesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "didtap")
         bk.addGestureRecognizer(panGesture)
         var top = (frame.size.height - 88.0/2.0)/2.0
-//        var btnRight = UIView(frame: CGRect(x: frame.size.width - top - 88.0/2.0, y: top, width: 88.0/2.0, height: 88.0/2.0))
-//        btnRight.backgroundColor = UIColor.blackColor()
-////        btnRight.layer.cornerRadius = 88.0/4.0
-//        
-//        bk.addSubview(btnRight)
+        var btnRight = UIView(frame: CGRect(x: frame.size.width - top - 88.0/2.0, y: top, width: 88.0/2.0, height: 88.0/2.0))
+        btnRight.backgroundColor = UIColor.clearColor()
+//        btnRight.layer.cornerRadius = 88.0/4.0
+        bk.addSubview(btnRight)
     }
     func show(show:Bool){
         UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
@@ -72,11 +71,12 @@ class BottomView: UIWindow {
         }
     }
     func didtap(){
-        UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
-//            self.alpha = 0
-            }) { (Bool) -> Void in
-                
-        }
+//        NSNotificationCenter.defaultCenter().postNotificationName(MSG_GOBACK_ALL, object: nil)
+//        UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseInOut, animations: { () -> Void in
+////            self.alpha = 0
+//            }) { (Bool) -> Void in
+//                
+//        }
     }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
