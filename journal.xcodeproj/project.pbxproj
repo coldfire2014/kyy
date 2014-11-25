@@ -46,7 +46,6 @@
 		E54BF8C41A0655710044BE3F /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54BF8C31A0655710044BE3F /* StatusBar.swift */; };
 		E54D787F1A14AF8100DAC6CB /* startBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E54D787D1A14AF8100DAC6CB /* startBtn@2x.png */; };
 		E54D78801A14AF8100DAC6CB /* startBtn@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E54D787E1A14AF8100DAC6CB /* startBtn@3x.png */; };
-		E54D78841A14AFDD00DAC6CB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E54D78831A14AFDD00DAC6CB /* Default@2x.png */; };
 		E54D788A1A14B04100DAC6CB /* icon57.png in Resources */ = {isa = PBXBuildFile; fileRef = E54D78891A14B04100DAC6CB /* icon57.png */; };
 		E56737BC1A08A39B0059B918 /* libBaiduMobStat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E56737BB1A08A39B0059B918 /* libBaiduMobStat.a */; };
 		E56737C51A08A3AD0059B918 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = E56737BF1A08A3AD0059B918 /* CJSONDeserializer.m */; };
@@ -172,7 +171,6 @@
 		E54BF8C31A0655710044BE3F /* StatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		E54D787D1A14AF8100DAC6CB /* startBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "startBtn@2x.png"; sourceTree = "<group>"; };
 		E54D787E1A14AF8100DAC6CB /* startBtn@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "startBtn@3x.png"; sourceTree = "<group>"; };
-		E54D78831A14AFDD00DAC6CB /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		E54D78891A14B04100DAC6CB /* icon57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon57.png; sourceTree = "<group>"; };
 		E56737BA1A08A39B0059B918 /* BaiduMobStat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaiduMobStat.h; path = ../../lib/BaiduMobStat.h; sourceTree = "<group>"; };
 		E56737BB1A08A39B0059B918 /* libBaiduMobStat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBaiduMobStat.a; path = ../../lib/libBaiduMobStat.a; sourceTree = "<group>"; };
@@ -542,7 +540,6 @@
 			isa = PBXGroup;
 			children = (
 				E54D78891A14B04100DAC6CB /* icon57.png */,
-				E54D78831A14AFDD00DAC6CB /* Default@2x.png */,
 			);
 			name = icon;
 			sourceTree = "<group>";
@@ -658,7 +655,6 @@
 				E532933B1A099A41003F289E /* T2.png in Resources */,
 				E59581B31A24211B00E235A9 /* LaunchScreen.xib in Resources */,
 				E532933C1A099A41003F289E /* T3.png in Resources */,
-				E54D78841A14AFDD00DAC6CB /* Default@2x.png in Resources */,
 				E54D78801A14AF8100DAC6CB /* startBtn@3x.png in Resources */,
 				E5971B661A104F6C00733DD7 /* fx.png in Resources */,
 				E53293331A099A41003F289E /* A1.png in Resources */,
