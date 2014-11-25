@@ -12,6 +12,35 @@ class myImageView: UIImageView {
     override init(frame:CGRect){
         super.init(frame: frame)
     }
+    class func getShadowImage(frame: CGRect)->UIImage{
+        
+        
+        UIGraphicsBeginImageContext(frame.size)
+        var imgRef:CGImageRef?
+        var context = UIGraphicsGetCurrentContext()
+        
+        var gradLocationsNum:size_t = 2;
+        var gradLocations:[CGFloat] = [0.0, 0.5];
+//        var gradColors:[CGFloat] = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0];
+        var gradColors:[CGFloat] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0];
+        var colorSpace = CGColorSpaceCreateDeviceRGB();
+        var gradient = CGGradientCreateWithColorComponents(colorSpace, gradColors, gradLocations, gradLocationsNum);
+        
+        //Gradient center
+        var startCenter = CGPoint(x:frame.size.width/2.0, y:frame.size.height);
+        var endCenter = CGPoint(x:frame.size.width/2.0, y:frame.size.height);
+        //Gradient radius
+        var gradRadius = frame.size.width > frame.size.height ? frame.size.width : frame.size.height
+        //Gradient draw
+        
+        CGContextDrawRadialGradient (context, gradient, startCenter,
+            0.0, endCenter, gradRadius,0);
+        
+        CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, frame.size.width, frame.size.height), imgRef);
+        var imageCopy = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return imageCopy;
+    }
     init(frame: CGRect, name:String! ,scale:CGFloat!) {
         super.init(frame: frame)
         userInteractionEnabled = true

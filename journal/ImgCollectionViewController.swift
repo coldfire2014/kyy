@@ -236,9 +236,14 @@ class ImgCollectionViewController: UICollectionViewController {
                 let headerView:imgGroupView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader,
                     withReuseIdentifier:hIdentifier,
                     forIndexPath: indexPath) as imgGroupView
+                var upgView:UIImageView = UIImageView(frame: CGRect(origin: CGPointZero, size: headerView.frame.size))
+                //        upgView.backgroundColor = UIColor.blackColor()
+                upgView.image = myImageView.getShadowImage(CGRect(origin: CGPointZero, size: headerView.frame.size))
+                headerView.addSubview(upgView)
                 var s = sections[indexPath.section]["name"] as String
                 var c = sections[indexPath.section]["count"] as Int
                 headerView.title.text = ""+s+" 共 \(c) 张照片"
+                headerView.bringSubviewToFront(headerView.title)
                 return headerView
             }else{
                 let footerView:imgGroupView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionFooter,
@@ -248,6 +253,11 @@ class ImgCollectionViewController: UICollectionViewController {
                 var c = sections[indexPath.section]["count"] as Int
                 footerView.title.text = ""+s+" 共 \(c) 张照片"
                 footerView.title.textAlignment = .Center
+                var upgView:UIImageView = UIImageView(frame: CGRect(origin: CGPointZero, size: footerView.frame.size))
+                //        upgView.backgroundColor = UIColor.blackColor()
+                upgView.image = myImageView.getShadowImage(CGRect(origin: CGPointZero, size: footerView.frame.size))
+                footerView.addSubview(upgView)
+                footerView.bringSubviewToFront(footerView.title)
                 return footerView
             }
     }

@@ -55,12 +55,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, WXApiDelegate{
         var f = UIScreen.mainScreen().bounds.size;
         bottom = BottomView(frame: CGRect(x: 0, y: f.height-98.0/2.0, width: f.width, height: 98.0/2.0));
         if let bn = bottom {
-            bn.changeTitle("")
+            bn.changeTitle("新建杂志")
         }
         
         top = NavView(frame: CGRect(x: 0, y: 0, width: f.width, height: 128.0/2.0));
-        var bg:myImageView = myImageView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: f), name: "bg", scale: 2.0)
         if let wn = window {
+            let bg = UIView(frame: CGRect(origin: CGPointZero, size: f))
+            bg.backgroundColor = UIColor.clearColor()
+            let layer:CAGradientLayer = CAGradientLayer()
+            layer.frame = bg.frame
+            layer.colors = [UIColor(red: 209.0/255.0, green: 231.0/255.0, blue: 227.0/255.0, alpha: 1).CGColor,
+                            UIColor(red: 204.0/255.0, green: 224.0/255.0, blue: 245.0/255.0, alpha: 1).CGColor]
+            layer.startPoint = CGPoint(x: 1, y: 0)
+            layer.endPoint = CGPoint(x: 0, y: 1)
+            bg.layer.addSublayer(layer)
             wn.addSubview(bg)
         }
         WXApi.registerApp(WX_APPID, withDescription: "kyy")

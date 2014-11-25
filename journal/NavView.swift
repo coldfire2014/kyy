@@ -36,7 +36,19 @@ class NavView: UIWindow {
         self.backgroundColor = UIColor.clearColor()
         self.alpha = 1.0
         self.hidden = false;
-        var bk:myImageView = myImageView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height), name: "top", scale: 2.0)
+        var bk = UIView(frame: CGRect(origin: CGPointZero, size: frame.size))
+        bk.backgroundColor = UIColor.clearColor()
+        let layer:CAGradientLayer = CAGradientLayer()
+        layer.frame = CGRect(origin: CGPointZero, size: CGSize(width: frame.size.height, height: frame.size.width))
+        layer.position = bk.center
+        layer.transform = CATransform3DMakeRotation(CGFloat( -M_PI_2 ), 0, 0, 1)
+        layer.colors = [UIColor(red: 75.0/255.0, green: 139.0/255.0, blue: 231.0/255.0, alpha: 1).CGColor,
+            UIColor(red: 105.0/255.0, green: 190.0/255.0, blue: 241.0/255.0, alpha: 1).CGColor,
+            UIColor(red: 122.0/255.0, green: 224.0/255.0, blue: 245.0/255.0, alpha: 1).CGColor]
+//        layer.startPoint = CGPointZero
+//        layer.endPoint = CGPoint(x: 1, y: 1)
+        layer.locations = [0,0.65,1]
+        bk.layer.addSublayer(layer)
         bk.tag = 101
         self.addSubview(bk)
         title.frame = CGRect(x: 0, y: 20.0, width: frame.size.width, height: frame.size.height-20.0)

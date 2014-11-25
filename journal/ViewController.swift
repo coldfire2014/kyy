@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 class ViewController: UIViewController ,UIViewControllerTransitioningDelegate{
     var imv:UIView = UIView()
     
@@ -38,16 +37,18 @@ class ViewController: UIViewController ,UIViewControllerTransitioningDelegate{
         var head:HeadInput = HeadInput(frame: CGRect(x: 36.0/2.0, y: 188.0/2.0, width: 120.0/2.0, height: 120.0/2.0))
         head.tag = 402
         bg.addSubview(head)
-//        var pic:PicInput = PicInput(frame: CGRect(x: 0, y: 550.0/2.0, width: w, height: (80.0+120.0+24.0/2.0)/2.0))
-//        bg.addSubview(pic)
-//        var music:MusicInput = MusicInput(frame: CGRect(x: 0, y: 894.0/2.0, width: w, height: 140.0/2.0))
-//        bg.addSubview(music)
+
         var music:MusicInput = MusicInput(frame: CGRect(x: 0, y: 550.0/2.0, width: w, height: 140.0/2.0))
         music.tag = 403
         bg.addSubview(music)
         var pic:PicInput = PicInput(frame: CGRect(x: 0, y: 675.0/2.0, width: w, height: (80.0+120.0+24.0/2.0)/2.0))
         pic.tag = 404
         bg.addSubview(pic)
+        
+//        var upgView:UIImageView = UIImageView(frame: CGRect(x: 0.0, y: 100.0, width: w, height: 20.0))
+//        upgView.image = myImageView.getShadowImage(CGRect(origin: CGPointZero, size: CGSize(width: w, height: 20.0)))
+//        bg.addSubview(upgView)
+        
     }
 
     override func viewDidAppear(animated: Bool) {
