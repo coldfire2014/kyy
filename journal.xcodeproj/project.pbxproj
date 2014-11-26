@@ -846,9 +846,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					/Users/wuyangbing/Documents/work/swift/lib,
-					/Users/wuyangbing/Documents/work/swift/Tencent/wechat_sdk_sample_ios/SDKExport,
 					/Users/wuyangbing/Documents/work/swift/Tencent,
 				);
 				ONLY_ACTIVE_ARCH = YES;
@@ -875,9 +873,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
 					/Users/wuyangbing/Documents/work/swift/lib,
-					/Users/wuyangbing/Documents/work/swift/Tencent/wechat_sdk_sample_ios/SDKExport,
 					/Users/wuyangbing/Documents/work/swift/Tencent,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
