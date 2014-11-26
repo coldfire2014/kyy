@@ -16,9 +16,10 @@ protocol ImgCollectionViewDelegate : NSObjectProtocol {
     func ownAssets()->Array<ALAsset>
 }
 class ImgCollectionViewController: UICollectionViewController {
+    var isShow = true
     weak var delegate: ImgCollectionViewDelegate?
     var m_w:Double = 0;
-    var needAnimation = false
+    var needAnimation = true
     var assert:AssetHelper = AssetHelper.sharedAssetHelper()
     var sections:Array<NSDictionary> = [];
     var cells:Array<Array<ALAsset>> = [];
@@ -94,12 +95,13 @@ class ImgCollectionViewController: UICollectionViewController {
         }
         self.collectionView.reloadData()
         if needAnimation {
+            isShow = true
             var t:CATransform3D = CATransform3DIdentity
             t.m34 = -1.0/900.0;
             let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
             moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -600)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 100)),NSValue(CATransform3D: t)];
             moveAnim.removedOnCompletion = false
-            let opacityAnim:CABasicAnimation = CABasicAnimation(keyPath: "alpha")
+            let opacityAnim:CABasicAnimation = CABasicAnimation(keyPath: "opacity")
             opacityAnim.fromValue = NSNumber(float: 0.0)
             opacityAnim.toValue = NSNumber(float: 1.0)
             opacityAnim.removedOnCompletion = false
@@ -115,13 +117,32 @@ class ImgCollectionViewController: UICollectionViewController {
         }
     }
     override func animationDidStop(anim:CAAnimation ,finished flag:Bool){
-        for index in selectIndexs {
-            self.collectionView.selectItemAtIndexPath(index,animated:false, scrollPosition:UICollectionViewScrollPosition.None)
-        }
-        if let ips = self.collectionView.indexPathsForSelectedItems() {
-            selectItems.removeAll(keepCapacity: false)
-            selectIndexs.removeAll(keepCapacity: false)
-            NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: ips.count)
+        if isShow {
+            for index in selectIndexs {
+                self.collectionView.selectItemAtIndexPath(index,animated:false, scrollPosition:UICollectionViewScrollPosition.None)
+            }
+            if let ips = self.collectionView.indexPathsForSelectedItems() {
+                selectItems.removeAll(keepCapacity: false)
+                selectIndexs.removeAll(keepCapacity: false)
+                NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: ips.count)
+            }
+        }else{
+            NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: 0)
+            self.dismissViewControllerAnimated(true, completion: { () -> Void in
+                if self.isOK {
+                    if let ips = self.collectionView.indexPathsForSelectedItems(){
+                        var als:Array<ALAsset> = []
+                        for indexPath in ips {
+                            var ar = self.cells[indexPath.section] as Array<ALAsset>
+                            var al = ar[indexPath.row] as ALAsset
+                            als.append(al)
+                        }
+                        if als.count > 0 {
+                            self.delegate?.didSelectAssets(als)
+                        }
+                    }
+                }
+            })
         }
     }
     override func didReceiveMemoryWarning() {
@@ -145,22 +166,25 @@ class ImgCollectionViewController: UICollectionViewController {
     }
     var isOK = false
     func back(){
-        NSNotificationCenter.defaultCenter().postNotificationName(MSG_SET_BADGE, object: 0)
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in
-            if self.isOK {
-                if let ips = self.collectionView.indexPathsForSelectedItems(){
-                    var als:Array<ALAsset> = []
-                    for indexPath in ips {
-                        var ar = self.cells[indexPath.section] as Array<ALAsset>
-                        var al = ar[indexPath.row] as ALAsset
-                        als.append(al)
-                    }
-                    if als.count > 0 {
-                        self.delegate?.didSelectAssets(als)
-                    }
-                }
-            }
-        })
+        isShow = false
+        var t:CATransform3D = CATransform3DIdentity
+        t.m34 = -1.0/900.0;
+        let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
+        moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 0)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 600))];
+        moveAnim.removedOnCompletion = false
+        let opacityAnim:CABasicAnimation = CABasicAnimation(keyPath: "opacity")
+        opacityAnim.fromValue = NSNumber(float: 1.0)
+        opacityAnim.toValue = NSNumber(float: 0.0)
+        opacityAnim.removedOnCompletion = false
+        
+        let animGroup:CAAnimationGroup = CAAnimationGroup()
+        animGroup.animations = [opacityAnim,moveAnim]
+        animGroup.duration = 0.5
+        animGroup.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        animGroup.removedOnCompletion = false
+        animGroup.fillMode = kCAFillModeForwards
+        animGroup.delegate = self
+        collectionView.layer.addAnimation(animGroup, forKey: "stop")
     }
     /*
     // MARK: - Navigation
