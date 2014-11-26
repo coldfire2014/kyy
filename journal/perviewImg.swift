@@ -103,7 +103,7 @@ class perviewImg: UIView {
         }
         
         let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
-        moveAnim.values = [NSValue(CATransform3D: CATransform3DMakeScale(d,d,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(1.3,1.3,1.0)),NSValue(CATransform3D: t)];
+        moveAnim.values = [NSValue(CATransform3D: CATransform3DMakeScale(d,d,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(1.3,1.3,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(0.9,0.9,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(1.04,1.04,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(0.99,0.99,1.0)),NSValue(CATransform3D: t)];
         moveAnim.removedOnCompletion = true
 
         let opacityAnim:CABasicAnimation = CABasicAnimation(keyPath: "alpha")

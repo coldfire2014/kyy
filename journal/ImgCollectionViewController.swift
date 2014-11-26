@@ -99,7 +99,7 @@ class ImgCollectionViewController: UICollectionViewController {
             var t:CATransform3D = CATransform3DIdentity
             t.m34 = -1.0/900.0;
             let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
-            moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -600)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 100)),NSValue(CATransform3D: t)];
+            moveAnim.values = [NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -600)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 216)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -78)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, 24)),NSValue(CATransform3D: CATransform3DTranslate(t, 0, 0, -6)),NSValue(CATransform3D: t)];
             moveAnim.removedOnCompletion = false
             let opacityAnim:CABasicAnimation = CABasicAnimation(keyPath: "opacity")
             opacityAnim.fromValue = NSNumber(float: 0.0)

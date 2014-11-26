@@ -119,9 +119,9 @@ class NavView: UIWindow {
         isLeftTap = true
         var t:CATransform3D = CATransform3DIdentity
         let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
-        moveAnim.values = [NSValue(CATransform3D: CATransform3DScale(t, 1.2, 1.2, 1)),NSValue(CATransform3D: CATransform3DScale(t, 0.9, 0.9, 1)),NSValue(CATransform3D: t)];
+        moveAnim.values = [NSValue(CATransform3D: CATransform3DMakeScale(1.3,1.3,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(0.9,0.9,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(1.04,1.04,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(0.99,0.99,1.0)),NSValue(CATransform3D: t)];
         moveAnim.removedOnCompletion = true
-        moveAnim.duration = 0.3
+        moveAnim.duration = 0.5
         moveAnim.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         moveAnim.removedOnCompletion = true
         moveAnim.fillMode = kCAFillModeForwards
@@ -137,9 +137,9 @@ class NavView: UIWindow {
         isLeftTap = false
         var t:CATransform3D = CATransform3DIdentity
         let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
-        moveAnim.values = [NSValue(CATransform3D: CATransform3DScale(t, 1.2, 1.2, 1)),NSValue(CATransform3D: CATransform3DScale(t, 0.9, 0.9, 1)),NSValue(CATransform3D: t)];
+        moveAnim.values = [NSValue(CATransform3D: CATransform3DMakeScale(1.3,1.3,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(0.9,0.9,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(1.04,1.04,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(0.99,0.99,1.0)),NSValue(CATransform3D: t)];
         moveAnim.removedOnCompletion = true
-        moveAnim.duration = 0.3
+        moveAnim.duration = 0.5
         moveAnim.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         moveAnim.removedOnCompletion = true
         moveAnim.fillMode = kCAFillModeForwards

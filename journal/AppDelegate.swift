@@ -7,6 +7,8 @@
 //
 
 import UIKit
+/*弹性阻尼参数*/
+let springDampPars:[Double] = [1,-0.36,0.13,-0.04,0.01,0]
 
 enum BarShowType : Int {
     case OnlyNav

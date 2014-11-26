@@ -116,7 +116,7 @@ class myImageView: UIImageView {
     func doudou(view:UIView!){
         var t:CATransform3D = CATransform3DIdentity
         let moveAnim:CAKeyframeAnimation = CAKeyframeAnimation(keyPath: "transform")
-        moveAnim.values = [NSValue(CATransform3D: CATransform3DScale(t, 1.3, 1.3, 1)),NSValue(CATransform3D: CATransform3DScale(t, 0.8, 0.8, 1)),NSValue(CATransform3D: CATransform3DScale(t, 1.1, 1.1, 1)),NSValue(CATransform3D: t)];
+        moveAnim.values = [NSValue(CATransform3D: CATransform3DMakeScale(1.3,1.3,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(0.9,0.9,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(1.04,1.04,1.0)),NSValue(CATransform3D: CATransform3DMakeScale(0.99,0.99,1.0)),NSValue(CATransform3D: t)];
         moveAnim.removedOnCompletion = true
         moveAnim.duration = 0.5
         moveAnim.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)

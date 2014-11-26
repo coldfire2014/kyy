@@ -56,7 +56,10 @@ class UserTableViewController: UITableViewController {
                         moveAnim.values.append(-bk.frame.size.width/4.0)
                         moveAnim.values.append(bk.frame.size.width/4.0)
                         moveAnim.values.append(bk.frame.size.width/2.0+10.0)
-                        moveAnim.values.append(bk.frame.size.width/2.0-2.0)
+                        moveAnim.values.append(bk.frame.size.width/2.0-3.6)
+                        moveAnim.values.append(bk.frame.size.width/2.0+1.3)
+                        moveAnim.values.append(bk.frame.size.width/2.0-0.4)
+                        moveAnim.values.append(bk.frame.size.width/2.0+0.1)
                         moveAnim.values.append(bk.frame.size.width/2.0)
                         moveAnim.delegate = self
                     }else{
