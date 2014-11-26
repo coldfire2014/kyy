@@ -27,7 +27,7 @@ class UserTableViewCell: UITableViewCell {
         var bk = UIView(frame: mark.frame)
         bk.tag = 502
         bk.backgroundColor = UIColor(white: 1, alpha: 0.5)
-        var icon = myImageView(frame: CGRect(x: 24.0/2.0, y: 18.0/2.0, width: 120.0/2.0, height: 120.0/2.0), name: "00", scale: 2.0)
+        var icon = myImageView(frame: CGRect(x: 24.0/2.0, y: 18.0/2.0, width: 120.0/2.0, height: 120.0/2.0), name: "180@2x", scale: 2.0)
         bk.addSubview(icon)
         self.addSubview(bk)
         

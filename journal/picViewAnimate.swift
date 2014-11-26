@@ -28,8 +28,8 @@ class picViewAnimate:NSObject, UIViewControllerAnimatedTransitioning{
 //                toView.view.layer.transform = CATransform3DTranslate(t, 0, 0, -600)
 //                UIView.animateWithDuration(self.transitionDuration(transitionContext), animations: { () -> Void in
 //                    toView.view.layer.transform = t
-//                    toView.view.layer.opacity = 1.0
-//                    fromView.view.layer.opacity = 0.0
+                    toView.view.layer.opacity = 1.0
+                    fromView.view.layer.opacity = 0.0
 //                    }, completion: { (Bool) -> Void in
                         transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
 //                })
@@ -39,8 +39,8 @@ class picViewAnimate:NSObject, UIViewControllerAnimatedTransitioning{
 //                toView.view.layer.opacity = 0.1
 //                UIView.animateWithDuration(self.transitionDuration(transitionContext), animations: { () -> Void in
 //                    fromView.view.layer.transform = CATransform3DTranslate(t, 0, 0, 600)
-//                    fromView.view.layer.opacity = 0.0
-//                    toView.view.layer.opacity = 1.0
+                    fromView.view.layer.opacity = 0.0
+                    toView.view.layer.opacity = 1.0
 //                    }, completion: { (Bool) -> Void in
                         transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
 //                })

@@ -12,9 +12,9 @@ class userSegue: UIStoryboardSegue {
     override func perform() {
         var svc = self.sourceViewController as ViewController
         var dvc = self.destinationViewController as UIViewController
-        dvc.modalPresentationStyle = .Custom
+        dvc.modalPresentationStyle = .FullScreen
 //        dvc.transitioningDelegate = svc
-        svc .presentViewController(dvc, animated: false) { () -> Void in
+        svc.presentViewController(dvc, animated: false) { () -> Void in
             
         }
     }
