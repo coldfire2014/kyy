@@ -346,6 +346,7 @@
 		E54BF89E1A06534E0044BE3F /* journal */ = {
 			isa = PBXGroup;
 			children = (
+				E5291A151A0732D2009694C0 /* journal-Bridging-Header.h */,
 				E54BF8A11A06534E0044BE3F /* AppDelegate.swift */,
 				E5971B671A10538400733DD7 /* UI */,
 				E53293251A099A33003F289E /* skin */,
@@ -387,7 +388,6 @@
 			isa = PBXGroup;
 			children = (
 				E56CD11B1A231A0F0076D7DC /* WeiChat */,
-				E5291A151A0732D2009694C0 /* journal-Bridging-Header.h */,
 				E5971B701A10999700733DD7 /* Asset */,
 				E56737B91A08A37D0059B918 /* baidu */,
 				E52919FB1A07325C009694C0 /* UIKit+AFNetworking */,
